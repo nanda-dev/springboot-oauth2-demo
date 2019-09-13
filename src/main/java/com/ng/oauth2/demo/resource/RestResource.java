@@ -2,9 +2,11 @@ package com.ng.oauth2.demo.resource;
 
 import javax.annotation.security.RolesAllowed;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RestResource 
 {
+	@Autowired private PasswordEncoder passwordEncoder;
+	
+	@GetMapping("/encode/{str}")
+	public String encode(@PathVariable String str) {
+		return passwordEncoder.encode(str);
+	}
+	
 	@RolesAllowed({"USER", "ADMIN"})
 	@GetMapping("/api/users/me")
 	public String profile() 

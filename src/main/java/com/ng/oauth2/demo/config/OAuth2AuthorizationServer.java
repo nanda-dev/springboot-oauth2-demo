@@ -1,5 +1,7 @@
 package com.ng.oauth2.demo.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +13,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
@@ -23,6 +25,9 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+    private DataSource ds;
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -34,23 +39,23 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients
-			.inMemory()
-			.withClient("client")
-			.secret(passwordEncoder.encode("secret"))
-			.authorizedGrantTypes("password", "refresh_token")
-			//.authorities("READ_ONLY_CLIENT")
-			.scopes("read", "write")
-			.resourceIds("oauth2-resource")
-			//.redirectUris("http://localhost:8081/login")
-			.accessTokenValiditySeconds(5000)
-			.refreshTokenValiditySeconds(50000);
+		
+		/*
+		 * clients .inMemory() .withClient("client")
+		 * .secret(passwordEncoder.encode("secret")) .authorizedGrantTypes("password",
+		 * "refresh_token") //.authorities("READ_ONLY_CLIENT")//not required
+		 * .scopes("read", "write") .resourceIds("oauth2-resource")
+		 * //.redirectUris("http://localhost:8081/login")//not required
+		 * .accessTokenValiditySeconds(5000) .refreshTokenValiditySeconds(50000);
+		 */
+		 
+		clients.jdbc(ds);
 	}
 	
 	@Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-        		//.tokenStore(tokenStore())
+        		.tokenStore(tokenStore())
         		.accessTokenConverter(accessTokenConverter())
                 .authenticationManager(authenticationManager);
     } 
@@ -58,7 +63,8 @@ public class OAuth2AuthorizationServer extends AuthorizationServerConfigurerAdap
 	@Bean
 	public TokenStore tokenStore() {
 		//return new InMemoryTokenStore();
-		return new JwtTokenStore(accessTokenConverter());
+		//return new JwtTokenStore(accessTokenConverter());
+		return new JdbcTokenStore(ds);
 	}
 	
 	@Bean
