@@ -187,4 +187,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 Following work(s) were referred to for creating this app:
 
 * [howtodoinjava: OAuth2 Authorization and Resource Server](https://howtodoinjava.com/spring5/security5/oauth2-auth-server/) - A form-based authorization_code grant_type implementation, which was then updated to implement the password grant_type implementation that we have with us now.
-* [Maven](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) - Sample README.md template that helped frame this basic Readme documentation.
+* [PurpleBooth/README-Template.md](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2) - Sample README.md template that helped frame this basic Readme documentation.
