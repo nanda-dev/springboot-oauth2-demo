@@ -14,9 +14,5 @@ public class OAuth2ResourceServer extends ResourceServerConfigurerAdapter
 		http
 			.anonymous().disable()
         	.authorizeRequests().anyRequest().authenticated();
-        	//.antMatchers("/").permitAll();
-        	//.antMatchers("/api/**").hasRole("USER");
-        	//.antMatchers("/api/**").hasAuthority("USER");
-        	//.authenticated();
 	}
 }

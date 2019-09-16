@@ -17,11 +17,6 @@ public class RestResource
 {
 	@Autowired private PasswordEncoder passwordEncoder;
 	
-	@GetMapping("/encode/{str}")
-	public String encode(@PathVariable String str) {
-		return passwordEncoder.encode(str);
-	}
-	
 	@RolesAllowed({"USER", "ADMIN"})
 	@GetMapping("/api/users/me")
 	public String profile() 
@@ -43,4 +38,10 @@ public class RestResource
 	public String admin() {
 		return "ADMIN";
 	}
+	
+	@GetMapping("/encode/{str}")
+	public String encode(@PathVariable String str) {
+		return passwordEncoder.encode(str);
+	}	
+	
 }

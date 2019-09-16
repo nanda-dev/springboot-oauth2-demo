@@ -17,6 +17,6 @@ VALUES
     'read,write',
     'authorization_code,check_token,refresh_token,password',
     'ROLE_CLIENT',
-    2500,
-    250000
+    30,
+    21600
   );
